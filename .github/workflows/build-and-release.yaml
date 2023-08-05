@@ -1,0 +1,59 @@
+name: build-and-release
+
+on:
+  workflow_call:
+    secrets:
+      PLANTON_CLOUD_CLIENT_ID:
+        required: true
+      PLANTON_CLOUD_CLIENT_SECRET:
+        required: true
+    inputs:
+      PLANTON_CLOUD_ARTIFACT_STORE_ID:
+        required: true
+        type: string
+      PLANTON_CLOUD_MICROSERVICE_INSTANCE_VERSION:
+        required: true
+        type: string
+      JAR_VERSION:
+        description: 'semantic version of the jar to be used for the release'
+        required: true
+      JAVA_PROJECT_ROOT:
+        description: 'path of the java project relative to the root of the repository'
+        required: false
+        default: '.'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.PLANTON_CLOUD_ENVIRONMENT_ID }}-${{ inputs.PLANTON_CLOUD_MICROSERVICE_INSTANCE_VERSION }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      
+      - name: Install Planton CLI
+        uses: plantoncloud/gha-install-planton-cli@main
+      
+      - name: Verify Planton CLI Installation
+        run: planton version
+      
+      - name: Login to Planton Cloud
+        uses: plantoncloud/gha-planton-cli-login@main
+        with:
+          planton_cloud_client_id: ${{ secrets.PLANTON_CLOUD_CLIENT_ID }}
+          planton_cloud_client_secret: ${{ secrets.PLANTON_CLOUD_CLIENT_SECRET }}
+      
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt-openj9'
+          java-version: '17'
+          cache: 'gradle'
+      
+      - name: Setup Google Application Credentials
+        uses: plantoncloud/gha-export-gac-for-pc-artifact-store@main
+        with:
+          planton_cloud_artifact_store_id: ${{ inputs.PLANTON_CLOUD_ARTIFACT_STORE_ID }}
+          key_type: writer
+
+      - name: Build & Publish with Gradle
+        run: ./gradlew publish -Prevision=${{ inputs.JAR_VERSION }} --no-daemon
