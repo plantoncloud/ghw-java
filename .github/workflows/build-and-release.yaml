@@ -13,9 +13,11 @@ on:
         type: string
       JAR_VERSION:
         description: 'semantic version of the jar to be used for the release'
+        type: string
         required: true
       JAVA_PROJECT_ROOT:
         description: 'path of the java project relative to the root of the repository'
+        type: string
         required: false
         default: '.'
 
