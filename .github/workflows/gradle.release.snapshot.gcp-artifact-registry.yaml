@@ -59,9 +59,8 @@ jobs:
           java-version: '${{ inputs.JAVA_VERSION }}'
           cache: 'gradle'
 
-      - name: Get short SHA
-        id: rev
+      - name: Export Short SHA Variable
         uses: rlespinasse/github-slug-action@v4.4.1
 
       - name: Build & Publish with Gradle
-        run: ./gradlew publish -Prevision=1.0.0-${{ steps.rev.outputs.short_sha }} --no-daemon
+        run: ./gradlew publish -Prevision=1.0.0-${{ env.GITHUB_SHA_SHORT }} --no-daemon

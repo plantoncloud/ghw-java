@@ -59,9 +59,8 @@ jobs:
           java-version: '${{ inputs.JAVA_VERSION }}'
           cache: 'maven'
 
-      - name: Get short SHA
-        id: rev
+      - name: Export Short SHA Variable
         uses: rlespinasse/github-slug-action@v4.4.1
 
       - name: Build & Publish with Maven
-        run: mvn deploy -Dproject.version=1.0.0-${{ steps.rev.outputs.short_sha }}
+        run: mvn deploy -Dproject.version=1.0.0-${{ env.GITHUB_SHA_SHORT }}
