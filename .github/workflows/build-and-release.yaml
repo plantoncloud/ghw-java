@@ -11,9 +11,6 @@ on:
       PLANTON_CLOUD_ARTIFACT_STORE_ID:
         required: true
         type: string
-      PLANTON_CLOUD_MICROSERVICE_INSTANCE_VERSION:
-        required: true
-        type: string
       JAR_VERSION:
         description: 'semantic version of the jar to be used for the release'
         required: true
@@ -23,9 +20,8 @@ on:
         default: '.'
 
 jobs:
-  build-and-deploy:
+  build-and-release:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.PLANTON_CLOUD_ENVIRONMENT_ID }}-${{ inputs.PLANTON_CLOUD_MICROSERVICE_INSTANCE_VERSION }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
