@@ -73,10 +73,15 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build --no-daemon
       
-      - name: Build & Push Docker Image
-        uses: plantoncloud/gha-build-and-push-docker-image@main
+      - name: GCP Artifact Registry Docker Login
+        uses: plantoncloud/gcp-artifact-registry-docker-login-action@main
         with:
           planton_cloud_artifact_store_id: ${{ inputs.PLANTON_CLOUD_ARTIFACT_STORE_ID }}
+          docker_repo_hostname: ${{ inputs.DOCKER_REPO_HOSTNAME }}
+      
+      - name: Build & Push Docker Image
+        uses: plantoncloud/build-and-push-docker-image-action@main
+        with:
           docker_repo_hostname: ${{ inputs.DOCKER_REPO_HOSTNAME }}
           container_image_repo: ${{ inputs.CONTAINER_IMAGE_REPO }}
           container_image_tag: ${{ inputs.CONTAINER_IMAGE_TAG }}

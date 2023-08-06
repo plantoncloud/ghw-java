@@ -1,50 +1,57 @@
-# GitHub Workflow: Build and Release Java Library JAR
+# GitHub Workflows for Java Projects
 
-This repository provides a GitHub Workflow that automates the process of building a Java library and releasing the JAR file to a Maven repository using Gradle and Planton Cloud.
+This repository contains GitHub workflows designed to automate the build, release, and deployment of Java-based projects, specifically for GCP Artifact Registry and Docker.
 
-The workflow performs the following steps:
+## Table of Contents
 
-1. **Checkout Code:** Fetches your library's codebase from the repository.
+- [Available Workflows](#available-workflows)
+- [Usage Instructions](#usage-instructions)
+    - [Build and Deploy Microservice](#build-and-deploy-microservice)
+    - [Build and Release with Maven/Gradle](#build-and-release-with-mavengradle)
+- [Contribution & Support](#contribution--support)
+  
+## Available Workflows
 
-2. **Install Planton CLI:** Installs the Planton Command Line Interface (CLI), a key tool used in subsequent steps.
+The following workflows are available:
 
-3. **Verify Planton CLI Installation:** Checks the installed Planton CLI version to verify the successful installation.
+1. Build and Deploy Microservice
+   - File: `gradle.gcp-artifact-registry.deploy-microservice.yaml`
+2. Release final version with Gradle
+   - File: `gradle.gcp-artifact-registry.release.final.yaml`
+3. Release snapshot version with Gradle
+   - File: `gradle.gcp-artifact-registry.release.snapshot.yaml`
+4. Release final version with Maven
+   - File: `maven.gcp-artifact-registry.release.final.yaml`
+5. Release snapshot version with Maven
+   - File: `maven.gcp-artifact-registry.release.snapshot.yaml`
 
-4. **Login to Planton Cloud:** Authenticates your session using the provided Planton Cloud credentials.
+## Usage Instructions
 
-5. **Setup Java:** Sets up the Java environment necessary for building the library using Gradle. It uses OpenJDK 17 and caches Gradle dependencies.
+### Build and Deploy Microservice
 
-6. **Setup GCP Artifact Registry Maven Credentials:** Fetches the Artifact Store key from Planton Cloud and sets it up as the Google Application Credentials.
+This workflow automates the process of building a microservice, creating a Docker image, and deploying it to a Planton Cloud environment.
 
-7. **Build & Publish with Gradle:** Builds your library and publishes the resulting JAR file to a Maven repository. It utilizes the version you pass in as an input to the workflow.
+#### Inputs:
 
-## Usage
+- `JAVA_DISTRIBUTION` & `JAVA_VERSION`: Specify the Java distribution and version.
+- `PLANTON_CLOUD_ARTIFACT_STORE_ID`: The ID of the Artifact Store on Planton Cloud.
+- `DOCKER_REPO_HOSTNAME` & `CONTAINER_IMAGE_REPO` & `CONTAINER_IMAGE_TAG`: Information related to the Docker repository.
+- `PLANTON_CLOUD_ENVIRONMENT_ID`, `PLANTON_CLOUD_ENVIRONMENT_NAME`, `PLANTON_CLOUD_MICROSERVICE_INSTANCE_VERSION`: Environment-specific details for deployment.
 
-To make use of this workflow, you need to include it in your GitHub Actions. The workflow can be triggered on a `workflow_call`.
+### Build and Release with Maven/Gradle
 
-```yaml
-on:
-  workflow_call:
-```
+This workflow automates the process of building a Java project using Maven/Gradle and then releasing it to the GCP Artifact Registry.
 
-### Secrets and Inputs
-
-The workflow requires the following secrets and inputs to be passed when calling the workflow:
-
-#### Secrets
-
-- `PLANTON_CLOUD_CLIENT_ID`: Your Planton Cloud Client ID.
-- `PLANTON_CLOUD_CLIENT_SECRET`: Your Planton Cloud Client Secret.
-
-#### Inputs
+#### Inputs:
 
 - `PLANTON_CLOUD_ARTIFACT_STORE_ID`: The ID of the Artifact Store on Planton Cloud.
-- `JAR_VERSION`: The semantic version of the JAR to be used for the release.
-- `JAVA_PROJECT_ROOT`: The path of the Java project relative to the root of the repository. Defaults to the root of the repository if not provided.
+- `JAVA_PROJECT_ROOT`: Path to the Java project.
+- `JAVA_DISTRIBUTION` & `JAVA_VERSION`: Specify the Java distribution and version.
+- `JAR_VERSION`: Semantic version of the JAR for the release.
 
-## Contributing
+## Contribution & Support
 
-If you have suggestions for how this GitHub Action could be improved, or want to report a bug, open an issue! We'd love all and any contributions.
+Feel free to contribute to this repository by submitting pull requests. For any issues or support requests, please raise an issue in the repository.
 
 ## License
 
