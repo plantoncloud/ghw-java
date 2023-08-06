@@ -37,9 +37,6 @@ jobs:
       - name: Install Planton CLI
         uses: plantoncloud/install-planton-cli-action@main
       
-      - name: Verify Planton CLI Installation
-        run: planton version
-
       - name: Login to Planton Cloud
         uses: plantoncloud/planton-cli-login-action@main
         with:
