@@ -87,7 +87,7 @@ jobs:
           container_image_tag: ${{ inputs.CONTAINER_IMAGE_TAG }}
 
       - name: Deploy Microservice
-        uses: plantoncloud/gha-deploy-microservice@main
+        uses: plantoncloud/deploy-microservice-action@main
         with:
           planton_cloud_environment_name: ${{ inputs.PLANTON_CLOUD_ENVIRONMENT_NAME }}
           planton_cloud_microservice_instance_version: ${{ inputs.PLANTON_CLOUD_MICROSERVICE_INSTANCE_VERSION }}
