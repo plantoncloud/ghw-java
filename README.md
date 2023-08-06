@@ -14,7 +14,7 @@ The workflow performs the following steps:
 
 5. **Setup Java:** Sets up the Java environment necessary for building the library using Gradle. It uses OpenJDK 17 and caches Gradle dependencies.
 
-6. **Setup Google Application Credentials:** Fetches the Artifact Store key from Planton Cloud and sets it up as the Google Application Credentials.
+6. **Setup GCP Artifact Registry Maven Credentials:** Fetches the Artifact Store key from Planton Cloud and sets it up as the Google Application Credentials.
 
 7. **Build & Publish with Gradle:** Builds your library and publishes the resulting JAR file to a Maven repository. It utilizes the version you pass in as an input to the workflow.
 

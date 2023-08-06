@@ -26,10 +26,6 @@ on:
         type: string
         required: false
         default: '17'
-      JAR_VERSION:
-        description: 'semantic version of the jar to be used for the release'
-        type: string
-        required: true
 
 jobs:
   build-and-release:
@@ -39,7 +35,7 @@ jobs:
         uses: actions/checkout@v3
       
       - name: Install Planton CLI
-        uses: plantoncloud/gha-install-planton-cli@main
+        uses: plantoncloud/install-planton-cli-action@main
       
       - name: Verify Planton CLI Installation
         run: planton version
@@ -50,8 +46,8 @@ jobs:
           planton_cloud_client_id: ${{ secrets.PLANTON_CLOUD_CLIENT_ID }}
           planton_cloud_client_secret: ${{ secrets.PLANTON_CLOUD_CLIENT_SECRET }}
 
-      - name: Setup Google Application Credentials
-        uses: plantoncloud/gha-export-gac-for-pc-artifact-store@main
+      - name: Setup GCP Artifact Registry Maven Credentials
+        uses: plantoncloud/setup-gcp-artifact-registry-maven-credentials-action@main
         with:
           planton_cloud_artifact_store_id: ${{ inputs.PLANTON_CLOUD_ARTIFACT_STORE_ID }}
           key_type: writer
@@ -61,7 +57,10 @@ jobs:
         with:
           distribution: '${{ inputs.JAVA_DISTRIBUTION }}'
           java-version: '${{ inputs.JAVA_VERSION }}'
-          cache: 'maven'
+          cache: 'gradle'
 
-      - name: Build & Publish with Maven
-        run: mvn deploy -Dproject.version=${{ inputs.JAR_VERSION }}
+      - name: Export Short SHA Variable
+        uses: rlespinasse/github-slug-action@v4.4.1
+
+      - name: Build & Publish with Gradle
+        run: ./gradlew publish -Prevision=1.0.0-${{ env.GITHUB_SHA_SHORT }} --no-daemon
